@@ -12,4 +12,3 @@ const gameRules = rules();
 gameRules.setUserName(userName);
 gameRules.reset();
 game(gameRules).start();
-
