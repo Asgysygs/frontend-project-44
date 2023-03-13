@@ -1,57 +1,27 @@
-export default () => {
-    const MAX_FAIL_COUNT = 0;
-    const MIN_SUCCESS_COUNT = 3;
-    let userName = null;
-    let successCount = 0;
-    let failCount = 0;
-  
-    function reset() {
-      successCount = 0;
-      failCount = 0;
+import readlineSync from 'readline-sync';
+
+const levelCount = 3;
+
+const runGame = (descriptionGame, getRoundsGame) => {
+  console.log('Welcome to the Brain Games!');
+  const playerName = readlineSync.question('May I have your name? ');
+  console.log(`Hello, ${playerName}!`);
+  console.log(descriptionGame);
+
+  for (let i = 0; i < levelCount; i += 1) {
+    const [question, correctAnswer] = getRoundsGame();
+    console.log(`Question: ${question}`);
+    const playerAnswer = readlineSync.question('Your answer: ');
+    if (playerAnswer !== correctAnswer) {
+      console.log(`"${playerAnswer}" is wrong answer ;(. Correct answer was "${correctAnswer}".`);
+      console.log(`Let's try again, ${playerName}!`);
+      return;
     }
-  
-    function finishWithLoose() {
-      console.log(`Let's try again, ${userName}!`);
-      reset();
-    }
-  
-    function finishWithWin() {
-      console.log(`Congratulations, ${userName}!`);
-      reset();
-    }
-  
-    function check({ rightAnswer, answer }, cb) {
-      if (answer === rightAnswer.toString()) {
-        console.log('Correct!');
-        successCount += 1;
-      } else {
-        console.log(`'${answer}' is wrong answer ;(. Correct answer was '${rightAnswer}'.`);
-        failCount += 1;
-      }
-  
-      if (failCount > MAX_FAIL_COUNT) {
-        finishWithLoose();
-      } else if (successCount >= MIN_SUCCESS_COUNT) {
-        finishWithWin();
-      } else {
-        cb();
-      }
-    }
-  
-    return {
-      userName,
-  
-      setUserName(name) {
-        userName = name;
-      },
-  
-      check({ rightAnswer, answer }, cb) {
-        check({ rightAnswer, answer }, cb);
-      },
-  
-      reset() {
-        reset();
-      },
-    };
-  };
-  
+
+    console.log('Correct!');
+  }
+
+  console.log(`Congratulations, ${playerName}!`);
+};
+
+export default runGame;
